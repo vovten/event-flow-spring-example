@@ -1,7 +1,0 @@
-com\github\vovten\eventflow\example\EventFlowApplication.class
-com\github\vovten\eventflow\example\OrderCreatedEvent.class
-com\github\vovten\eventflow\example\controller\OrderController.class
-com\github\vovten\eventflow\example\OrderEventListener.class
-com\github\vovten\eventflow\example\model\Order.class
-com\github\vovten\eventflow\example\controller\OrderController$OrderRequest.class
-com\github\vovten\eventflow\example\AppConfig.class
