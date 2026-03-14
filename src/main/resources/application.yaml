@@ -1,0 +1,2 @@
+event-flow:
+  scan-packages: com.github.vovten.eventflow.example
