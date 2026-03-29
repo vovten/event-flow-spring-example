@@ -1,5 +1,5 @@
 event-flow:
-  enabled: false
+  enabled: true
   scan-packages: com.github.vovten.eventflow.example
   publisher:
     enabled: true
@@ -7,11 +7,16 @@ event-flow:
     retry:
       enabled: true
       max-attempts: 3
-      initial-delay: 100ms
-      multiplier: 2.0
-    silent: false
+    silent: true
     channels:
       - name: internal
         transports:
-          - name: in-memory
-            capacity: 1000
+          - name: kafka
+            servers: localhost:9092
+            topic: test
+  dispatcher:
+    enabled: true
+    transports:
+      - name: kafka
+        topic: test
+        servers: localhost:9092
