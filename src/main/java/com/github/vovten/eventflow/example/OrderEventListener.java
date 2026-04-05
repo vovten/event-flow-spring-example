@@ -1,7 +1,7 @@
 package com.github.vovten.eventflow.example;
 
 import com.github.vovten.eventflow.EventListener;
-import com.github.vovten.eventflow.example.event.BroadCastOrderCreatedEvent;
+import com.custom.BroadCastOrderCreatedEvent;
 import com.github.vovten.eventflow.example.event.InternalOrderCreatedEvent;
 import com.github.vovten.eventflow.example.event.ExternalOrderCreatedEvent;
 import org.springframework.stereotype.Component;

@@ -32,7 +32,7 @@ import java.util.concurrent.LinkedBlockingDeque;
  * Uncomment @Configuration annotation and disable auto-configuration in application.yaml
  * for manual configuration testing.
  */
-@Configuration  // Uncomment for manual configuration testing and disable event-flow auto-configuration in application.yaml
+//@Configuration  // Uncomment for manual configuration testing and disable event-flow auto-configuration in application.yaml
 public class EventFlowConfig {
 
     private final LinkedBlockingDeque<Event> eventQueue = new LinkedBlockingDeque<>(100);

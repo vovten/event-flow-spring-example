@@ -1,6 +1,5 @@
 event-flow:
   enabled: true
-  scan-packages: com.github.vovten.eventflow.example
   publisher:
     enabled: true
     transactional: true
@@ -27,6 +26,10 @@ event-flow:
             topic: test
   dispatcher:
     enabled: true
+    listener-packages: com.github.vovten.eventflow.example
+    deserialization:
+      allowed-event-packages:
+        - com.custom
     idempotent:
       enabled: true
     transports:

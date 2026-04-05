@@ -1,4 +1,4 @@
-package com.github.vovten.eventflow.example.event;
+package com.custom;
 
 import com.github.vovten.eventflow.channel.BroadcastEventChannel;
 import com.github.vovten.eventflow.channel.EventChannel;
