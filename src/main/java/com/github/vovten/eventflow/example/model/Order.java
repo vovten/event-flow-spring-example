@@ -1,5 +1,9 @@
 package com.github.vovten.eventflow.example.model;
 
+/**
+ * Represents an order in the system.
+ * Contains order details including customer information, product, quantity, and pricing.
+ */
 public class Order {
     private Long id;
     private String customerName;

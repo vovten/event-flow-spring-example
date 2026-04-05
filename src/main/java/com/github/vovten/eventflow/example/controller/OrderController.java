@@ -1,6 +1,8 @@
 package com.github.vovten.eventflow.example.controller;
 
-import com.github.vovten.eventflow.example.OrderCreatedEvent;
+import com.github.vovten.eventflow.example.event.BroadCastOrderCreatedEvent;
+import com.github.vovten.eventflow.example.event.InternalOrderCreatedEvent;
+import com.github.vovten.eventflow.example.event.ExternalOrderCreatedEvent;
 import com.github.vovten.eventflow.example.model.Order;
 import com.github.vovten.eventflow.publisher.EventPublisher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ * REST controller for managing order operations.
+ * Provides endpoints to create orders and publish corresponding events.
+ */
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
@@ -21,6 +27,12 @@ public class OrderController {
 
     private final AtomicLong orderCounter = new AtomicLong(1);
 
+    /**
+     * Creates a new order and publishes a broadcast event.
+     *
+     * @param request the order request containing customer name, product, quantity, and price
+     * @return the created order with generated ID
+     */
     @PostMapping("/createOrder")
     public ResponseEntity<Order> createOrder(@RequestBody OrderRequest request) {
         Order order = new Order(
@@ -30,10 +42,14 @@ public class OrderController {
                 request.getQuantity(),
                 request.getPrice()
         );
-        eventPublisher.publish(new OrderCreatedEvent(order.getId()));
+        eventPublisher.publish(new BroadCastOrderCreatedEvent(order.getId())); // try different type of events here
         return ResponseEntity.ok(order);
     }
 
+    /**
+     * Request DTO for creating an order.
+     * Contains customer name, product, quantity, and price information.
+     */
     public static class OrderRequest {
         private String customerName;
         private String product;

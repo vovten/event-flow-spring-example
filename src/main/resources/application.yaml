@@ -4,19 +4,34 @@ event-flow:
   publisher:
     enabled: true
     transactional: true
+    silent: true
     retry:
       enabled: true
       max-attempts: 3
-    silent: true
+    async:
+      enabled: true
     channels:
       - name: internal
+        transports:
+          - name: local-queue
+      - name: external
+        transports:
+          - name: kafka
+            servers: localhost:9092
+            topic: test
+            serialization: myJson
+      - name: broadcast
         transports:
           - name: kafka
             servers: localhost:9092
             topic: test
   dispatcher:
     enabled: true
+    idempotent:
+      enabled: true
     transports:
+      - name: local-queue
       - name: kafka
         topic: test
         servers: localhost:9092
+
