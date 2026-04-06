@@ -1,4 +1,4 @@
-package com.github.vovten.eventflow.example.config;
+package com.github.vovten.eventflow.example;
 
 import com.github.vovten.eventflow.channel.BroadcastEventChannel;
 import com.github.vovten.eventflow.channel.ExternalEventChannel;
@@ -6,12 +6,12 @@ import com.github.vovten.eventflow.channel.InternalEventChannel;
 import com.github.vovten.eventflow.dispatcher.EventDispatcher;
 import com.github.vovten.eventflow.dispatcher.EventDispatcherBuilder;
 import com.github.vovten.eventflow.event.Event;
-import com.github.vovten.eventflow.example.MyJsonSerializer;
 import com.github.vovten.eventflow.publisher.EventPublisher;
 import com.github.vovten.eventflow.publisher.SpringEventPublisherBuilder;
 import com.github.vovten.eventflow.registry.EventHandlerRegistry;
 import com.github.vovten.eventflow.registry.SpringEventHandlerRegistryBuilder;
 import com.github.vovten.eventflow.serialization.EventSerializerFactory;
+import com.github.vovten.eventflow.serialization.EventTypeRegistry;
 import com.github.vovten.eventflow.transport.incoming.KafkaInTransport;
 import com.github.vovten.eventflow.transport.incoming.LocalQueueInTransport;
 import com.github.vovten.eventflow.transport.outgoing.BroadcastKafkaOutTransport;
@@ -32,7 +32,7 @@ import java.util.concurrent.LinkedBlockingDeque;
  * Uncomment @Configuration annotation and disable auto-configuration in application.yaml
  * for manual configuration testing.
  */
-//@Configuration  // Uncomment for manual configuration testing and disable event-flow auto-configuration in application.yaml
+//@Configuration
 public class EventFlowConfig {
 
     private final LinkedBlockingDeque<Event> eventQueue = new LinkedBlockingDeque<>(100);
@@ -52,6 +52,14 @@ public class EventFlowConfig {
                 .buildAndLog();
     }
 
+    @Bean
+    public EventSerializerFactory serializerFactory() {
+        var serializer = new MyJsonSerializer();
+        var serializerFactory = new EventSerializerFactory();
+        serializerFactory.register(serializer);
+        return serializerFactory;
+    }
+
     /**
      * Creates and configures the event publisher with multiple event channels.
      * Sets up internal, external, and broadcast channels with appropriate transports.
@@ -60,12 +68,11 @@ public class EventFlowConfig {
      * @return configured event publisher
      */
     @Bean
-    public EventPublisher eventPublisher() {
-        var serializer = new MyJsonSerializer();
-        EventSerializerFactory.register(serializer);
+    public EventPublisher eventPublisher(EventSerializerFactory serializerFactory) {
         var intChannel = new InternalEventChannel(new LocalQueueOutTransport(eventQueue));
-        var transport = new KafkaOutTransport("localhost:9092", "test");
-        var broadcastTransport = new BroadcastKafkaOutTransport("localhost:9092", "test", serializer);
+        var serializer = serializerFactory.getByName("myJson");
+        var transport = new KafkaOutTransport("localhost:9092", "test", serializer);
+        var broadcastTransport = new BroadcastKafkaOutTransport("localhost:9092", "test2", serializer);
         var extChannel = new ExternalEventChannel(transport);
         var broadcastChannel = new BroadcastEventChannel(broadcastTransport);
         return SpringEventPublisherBuilder.create(intChannel, extChannel, broadcastChannel)
@@ -84,9 +91,12 @@ public class EventFlowConfig {
      * @return configured and started event dispatcher
      */
     @Bean
-    EventDispatcher eventDispatcher(EventHandlerRegistry eventHandlerRegistry) {
+    EventDispatcher eventDispatcher(EventHandlerRegistry eventHandlerRegistry,
+                                    EventSerializerFactory serializerFactory) {
+        EventTypeRegistry.allowPackage("com.custom");
         var localTransport = new LocalQueueInTransport(eventQueue);
-        var kafkaTransport = new KafkaInTransport("localhost:9092", "test", "group");
+        var kafkaTransport = new KafkaInTransport("localhost:9092", "test2",
+                "group", serializerFactory);
         EventDispatcher dispatcher = EventDispatcherBuilder.create()
                 .addTransports(localTransport, kafkaTransport)
                 .idempotent()

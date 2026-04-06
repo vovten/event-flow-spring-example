@@ -1,4 +1,4 @@
-package com.github.vovten.eventflow.example.model;
+package com.github.vovten.eventflow.example;
 
 /**
  * Represents an order in the system.

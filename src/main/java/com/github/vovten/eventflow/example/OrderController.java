@@ -1,7 +1,6 @@
-package com.github.vovten.eventflow.example.controller;
+package com.github.vovten.eventflow.example;
 
 import com.custom.BroadCastOrderCreatedEvent;
-import com.github.vovten.eventflow.example.model.Order;
 import com.github.vovten.eventflow.publisher.EventPublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
