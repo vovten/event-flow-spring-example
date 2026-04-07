@@ -4,6 +4,8 @@ import com.github.vovten.eventflow.EventListener;
 import com.custom.BroadCastOrderCreatedEvent;
 import com.github.vovten.eventflow.example.event.ExternalOrderCreatedEvent;
 import com.github.vovten.eventflow.example.event.InternalOrderCreatedEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,10 +16,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class OrderEventListener {
 
+    private static final Logger logger = LoggerFactory.getLogger(OrderEventListener.class);
+
     @EventListener
     public void onEvent(InternalOrderCreatedEvent event) {
         String msg = String.format("InternalOrderCreatedEvent with ID=%s processed", event.getOrderId());
-        System.out.println(msg);
+        logger.info(msg);
     }
 
     /**
@@ -28,7 +32,7 @@ public class OrderEventListener {
     @EventListener
     public void onEvent(ExternalOrderCreatedEvent event) {
         String msg = String.format("ExternalOrderCreatedEvent with ID=%s processed", event.getOrderId());
-        System.out.println(msg);
+        logger.info(msg);
     }
 
     /**
@@ -39,6 +43,6 @@ public class OrderEventListener {
     @EventListener
     public void onEvent(BroadCastOrderCreatedEvent event) {
         String msg = String.format("BroadCastOrderCreatedEvent with ID=%s processed", event.getOrderId());
-        System.out.println(msg);
+        logger.info(msg);
     }
 }
