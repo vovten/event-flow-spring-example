@@ -77,9 +77,7 @@ public class EventFlowConfig {
         var broadcastChannel = new BroadcastEventChannel(broadcastTransport);
         return SpringEventPublisherBuilder.create(intChannel, extChannel, broadcastChannel)
                 .retryable()
-                .silent()
                 .transactional()
-                .async(Executors.newFixedThreadPool(2))
                 .buildAndLog();
     }
 
