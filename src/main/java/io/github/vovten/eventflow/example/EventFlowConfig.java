@@ -1,22 +1,22 @@
-package com.github.vovten.eventflow.example;
+package io.github.vovten.eventflow.example;
 
-import com.github.vovten.eventflow.channel.BroadcastEventChannel;
-import com.github.vovten.eventflow.channel.ExternalEventChannel;
-import com.github.vovten.eventflow.channel.InternalEventChannel;
-import com.github.vovten.eventflow.dispatcher.EventDispatcher;
-import com.github.vovten.eventflow.dispatcher.EventDispatcherBuilder;
-import com.github.vovten.eventflow.event.Event;
-import com.github.vovten.eventflow.publisher.EventPublisher;
-import com.github.vovten.eventflow.publisher.SpringEventPublisherBuilder;
-import com.github.vovten.eventflow.registry.EventHandlerRegistry;
-import com.github.vovten.eventflow.registry.SpringEventHandlerRegistryBuilder;
-import com.github.vovten.eventflow.serialization.EventSerializerFactory;
-import com.github.vovten.eventflow.serialization.EventTypeRegistry;
-import com.github.vovten.eventflow.transport.incoming.KafkaInTransport;
-import com.github.vovten.eventflow.transport.incoming.LocalQueueInTransport;
-import com.github.vovten.eventflow.transport.outgoing.BroadcastKafkaOutTransport;
-import com.github.vovten.eventflow.transport.outgoing.KafkaOutTransport;
-import com.github.vovten.eventflow.transport.outgoing.LocalQueueOutTransport;
+import io.github.vovten.eventflow.channel.BroadcastEventChannel;
+import io.github.vovten.eventflow.channel.ExternalEventChannel;
+import io.github.vovten.eventflow.channel.InternalEventChannel;
+import io.github.vovten.eventflow.dispatcher.EventDispatcher;
+import io.github.vovten.eventflow.dispatcher.EventDispatcherBuilder;
+import io.github.vovten.eventflow.event.Event;
+import io.github.vovten.eventflow.publisher.EventPublisher;
+import io.github.vovten.eventflow.publisher.SpringEventPublisherBuilder;
+import io.github.vovten.eventflow.registry.EventHandlerRegistry;
+import io.github.vovten.eventflow.registry.SpringEventHandlerRegistryBuilder;
+import io.github.vovten.eventflow.serialization.EventSerializerFactory;
+import io.github.vovten.eventflow.serialization.EventTypeRegistry;
+import io.github.vovten.eventflow.transport.incoming.KafkaInTransport;
+import io.github.vovten.eventflow.transport.incoming.LocalQueueInTransport;
+import io.github.vovten.eventflow.transport.outgoing.BroadcastKafkaOutTransport;
+import io.github.vovten.eventflow.transport.outgoing.KafkaOutTransport;
+import io.github.vovten.eventflow.transport.outgoing.LocalQueueOutTransport;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -47,7 +47,7 @@ public class EventFlowConfig {
     @Bean
     public EventHandlerRegistry eventHandlerRegistry(ApplicationContext applicationContext) {
         return SpringEventHandlerRegistryBuilder.create(applicationContext)
-                .withAnnotationListeners("com.github.vovten.eventflow.example")
+                .withAnnotationListeners("io.github.vovten.eventflow.example")
                 .withInterfaceListeners()
                 .buildAndLog();
     }

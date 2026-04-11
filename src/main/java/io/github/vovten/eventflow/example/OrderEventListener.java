@@ -1,9 +1,9 @@
-package com.github.vovten.eventflow.example;
+package io.github.vovten.eventflow.example;
 
-import com.github.vovten.eventflow.EventListener;
+import io.github.vovten.eventflow.EventListener;
 import com.custom.BroadCastOrderCreatedEvent;
-import com.github.vovten.eventflow.example.event.ExternalOrderCreatedEvent;
-import com.github.vovten.eventflow.example.event.InternalOrderCreatedEvent;
+import io.github.vovten.eventflow.example.event.ExternalOrderCreatedEvent;
+import io.github.vovten.eventflow.example.event.InternalOrderCreatedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

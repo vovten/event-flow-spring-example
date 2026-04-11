@@ -1,8 +1,8 @@
-package com.github.vovten.eventflow.example;
+package io.github.vovten.eventflow.example;
 
-import com.github.vovten.eventflow.event.Event;
-import com.github.vovten.eventflow.serialization.EventSerializer;
-import com.github.vovten.eventflow.util.EventUtils;
+import io.github.vovten.eventflow.event.Event;
+import io.github.vovten.eventflow.serialization.EventSerializer;
+import io.github.vovten.eventflow.util.EventUtils;
 import org.springframework.stereotype.Component;
 
 /**

@@ -1,8 +1,9 @@
-package com.github.vovten.eventflow.example.event;
+package io.github.vovten.eventflow.example.event;
 
-import com.github.vovten.eventflow.channel.EventChannel;
-import com.github.vovten.eventflow.channel.InternalEventChannel;
-import com.github.vovten.eventflow.event.Event;
+import io.github.vovten.eventflow.channel.EventChannel;
+import io.github.vovten.eventflow.channel.InternalEventChannel;
+import io.github.vovten.eventflow.event.Event;
+import io.github.vovten.eventflow.channel.EventChannel;
 
 import java.util.List;
 

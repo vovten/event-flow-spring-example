@@ -1,4 +1,4 @@
-package com.github.vovten.eventflow.example;
+package io.github.vovten.eventflow.example;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,9 +1,10 @@
 package com.custom;
 
-import com.github.vovten.eventflow.channel.BroadcastEventChannel;
-import com.github.vovten.eventflow.channel.EventChannel;
-import com.github.vovten.eventflow.event.AbstractTraceableEvent;
-import com.github.vovten.eventflow.event.Event;
+import io.github.vovten.eventflow.channel.BroadcastEventChannel;
+import io.github.vovten.eventflow.channel.EventChannel;
+import io.github.vovten.eventflow.channel.InternalEventChannel;
+import io.github.vovten.eventflow.event.AbstractTraceableEvent;
+import io.github.vovten.eventflow.event.Event;
 
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class BroadCastOrderCreatedEvent extends AbstractTraceableEvent {
 
     @Override
     public List<Class<? extends EventChannel>> channels() {
-        return List.of(BroadcastEventChannel.class);
+        return List.of(BroadcastEventChannel.class, InternalEventChannel.class);
     }
 
 }

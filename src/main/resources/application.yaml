@@ -26,7 +26,7 @@ event-flow:
             topic: test2
   dispatcher:
     enabled: true
-    listener-packages: com.github.vovten.eventflow.example
+    listener-packages: io.github.vovten.eventflow.example
     deserialization:
       allowed-event-packages:
         - com.custom
