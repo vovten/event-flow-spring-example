@@ -1,0 +1,8 @@
+curl -X POST http://localhost:8080/api/orders/createOrder \
+-H "Content-Type: application/json" \
+-d '{
+"customerName": "John Doe",
+"product": "Laptop",
+"quantity": 1,
+"price": 999.99
+}'
