@@ -2,7 +2,9 @@ package io.github.vovten.eventflow.example;
 
 import io.github.vovten.eventflow.EventListener;
 import com.custom.BroadCastOrderCreatedEvent;
+import io.github.vovten.eventflow.event.Envelope;
 import io.github.vovten.eventflow.example.event.DomainOrderEvent;
+import io.github.vovten.eventflow.example.event.EnvelopeDomainOrderEvent;
 import io.github.vovten.eventflow.example.event.ExternalOrderCreatedEvent;
 import io.github.vovten.eventflow.example.event.InternalOrderCreatedEvent;
 import org.slf4j.Logger;
@@ -48,7 +50,19 @@ public class OrderEventListener {
     }
 
     /**
-     * Handles broadcast order created events.
+     * Handles order created events.
+     *
+     * @param event the broadcast order created event
+     */
+    @EventListener(EnvelopeDomainOrderEvent.class)
+    public void onEvent(Envelope<EnvelopeDomainOrderEvent> event) {
+        EnvelopeDomainOrderEvent payload = event.payload();
+        String msg = String.format("Envelope DomainOrderEvent with ID=%s processed", payload.orderId());
+        logger.info(msg);
+    }
+
+    /**
+     * Handles order created events.
      *
      * @param event the broadcast order created event
      */
