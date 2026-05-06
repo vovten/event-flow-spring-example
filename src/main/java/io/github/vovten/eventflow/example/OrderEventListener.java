@@ -2,6 +2,7 @@ package io.github.vovten.eventflow.example;
 
 import io.github.vovten.eventflow.EventListener;
 import com.custom.BroadCastOrderCreatedEvent;
+import io.github.vovten.eventflow.example.event.DomainOrderEvent;
 import io.github.vovten.eventflow.example.event.ExternalOrderCreatedEvent;
 import io.github.vovten.eventflow.example.event.InternalOrderCreatedEvent;
 import org.slf4j.Logger;
@@ -43,6 +44,17 @@ public class OrderEventListener {
     @EventListener
     public void onEvent(BroadCastOrderCreatedEvent event) {
         String msg = String.format("BroadCastOrderCreatedEvent with ID=%s processed", event.getOrderId());
+        logger.info(msg);
+    }
+
+    /**
+     * Handles broadcast order created events.
+     *
+     * @param event the broadcast order created event
+     */
+    @EventListener
+    public void onEvent(DomainOrderEvent event) {
+        String msg = String.format("DomainOrderEvent with ID=%s processed", event.orderId());
         logger.info(msg);
     }
 }

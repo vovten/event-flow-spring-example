@@ -1,6 +1,7 @@
 package io.github.vovten.eventflow.example;
 
 import com.custom.BroadCastOrderCreatedEvent;
+import io.github.vovten.eventflow.example.event.DomainOrderEvent;
 import io.github.vovten.eventflow.example.event.ExternalOrderCreatedEvent;
 import io.github.vovten.eventflow.example.event.InternalOrderCreatedEvent;
 import io.github.vovten.eventflow.publisher.EventPublisher;
@@ -41,9 +42,10 @@ public class OrderController {
                 request.getQuantity(),
                 request.getPrice()
         );
-        eventPublisher.publish(new InternalOrderCreatedEvent(order.getId())); // try different type of events here
-        eventPublisher.publish(new ExternalOrderCreatedEvent(order.getId())); // try different type of events here
-        eventPublisher.publish(new BroadCastOrderCreatedEvent(order.getId())); // try different type of events here
+        eventPublisher.publish(new DomainOrderEvent(order.getId()));
+//        eventPublisher.publish(new InternalOrderCreatedEvent(order.getId())); // try different type of events here
+//        eventPublisher.publish(new ExternalOrderCreatedEvent(order.getId())); // try different type of events here
+//        eventPublisher.publish(new BroadCastOrderCreatedEvent(order.getId())); // try different type of events here
         return ResponseEntity.ok(order);
     }
 
