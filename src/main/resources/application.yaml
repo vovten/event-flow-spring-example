@@ -17,13 +17,13 @@ event-flow:
         transports:
           - name: kafka
             servers: localhost:9092
-            topic: test2
+            topics: test2
             serialization: myJson
       - name: broadcast
         transports:
           - name: kafka
             servers: localhost:9092
-            topic: test2
+            topics: test2
   dispatcher:
     enabled: true
     listener-packages: io.github.vovten.eventflow.example
@@ -35,6 +35,6 @@ event-flow:
     transports:
       - name: local-queue
       - name: kafka
-        topic: test2
+        topics: test2
         servers: localhost:9092
 
