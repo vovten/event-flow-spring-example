@@ -1,10 +1,12 @@
 package io.github.vovten.eventflow.example;
 
 import com.custom.BroadCastOrderCreatedEvent;
-import io.github.vovten.eventflow.example.event.DomainOrderEvent;
+import io.github.vovten.eventflow.channel.BroadcastEventChannel;
+import io.github.vovten.eventflow.channel.InternalEventChannel;
 import io.github.vovten.eventflow.example.event.EnvelopeDomainOrderEvent;
 import io.github.vovten.eventflow.example.event.ExternalOrderCreatedEvent;
 import io.github.vovten.eventflow.example.event.InternalOrderCreatedEvent;
+import io.github.vovten.eventflow.example.event.OrderCreatedEvent;
 import io.github.vovten.eventflow.publisher.EventPublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -43,8 +46,12 @@ public class OrderController {
                 request.getQuantity(),
                 request.getPrice()
         );
-        eventPublisher.publish(new DomainOrderEvent(order.getId()));
-        eventPublisher.publish(new EnvelopeDomainOrderEvent(order.getId()));
+        eventPublisher.publish(new OrderCreatedEvent(order.getId()));
+
+//        eventPublisher.prepare(new OrderCreatedEvent(1))
+//                .withProcessId(UUID.randomUUID())
+//                .publish();
+//
 //        eventPublisher.publish(new InternalOrderCreatedEvent(order.getId())); // try different type of events here
 //        eventPublisher.publish(new ExternalOrderCreatedEvent(order.getId())); // try different type of events here
 //        eventPublisher.publish(new BroadCastOrderCreatedEvent(order.getId())); // try different type of events here

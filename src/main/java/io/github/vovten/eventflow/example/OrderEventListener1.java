@@ -1,19 +1,15 @@
 package io.github.vovten.eventflow.example;
 
-import io.github.vovten.eventflow.EventListener;
 import com.custom.BroadCastOrderCreatedEvent;
-import io.github.vovten.eventflow.EventSubscriber;
+import io.github.vovten.eventflow.EventListener;
 import io.github.vovten.eventflow.event.Envelope;
-import io.github.vovten.eventflow.event.Event;
-import io.github.vovten.eventflow.example.event.OrderCreatedEvent;
 import io.github.vovten.eventflow.example.event.EnvelopeDomainOrderEvent;
 import io.github.vovten.eventflow.example.event.ExternalOrderCreatedEvent;
 import io.github.vovten.eventflow.example.event.InternalOrderCreatedEvent;
+import io.github.vovten.eventflow.example.event.OrderCreatedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * Event listener for order-related events.
@@ -21,9 +17,9 @@ import java.util.List;
  * Each event type is processed and logged to the console.
  */
 @Component
-public class OrderEventListener {
+public class OrderEventListener1 {
 
-    private static final Logger logger = LoggerFactory.getLogger(OrderEventListener.class);
+    private static final Logger logger = LoggerFactory.getLogger(OrderEventListener1.class);
 
     @EventListener
     public void onEvent(InternalOrderCreatedEvent event) {
@@ -58,21 +54,21 @@ public class OrderEventListener {
      *
      * @param event the broadcast order created event
      */
-    @EventListener(BroadCastOrderCreatedEvent.class)
-    public void onEvent(Envelope<OrderCreatedEvent> event) {
-        OrderCreatedEvent payload = event.payload();
+    @EventListener(EnvelopeDomainOrderEvent.class)
+    public void onEvent(Envelope<EnvelopeDomainOrderEvent> event) {
+        EnvelopeDomainOrderEvent payload = event.payload();
         String msg = String.format("Envelope DomainOrderEvent with ID=%s processed", payload.orderId());
         logger.info(msg);
     }
 
-//    /**
-//     * Handles order created events.
-//     *
-//     * @param event the broadcast order created event
-//     */
-//    @EventListener
-//    public void onEvent(OrderCreatedEvent event) {
-//        String msg = String.format("OrderCreatedEvent with ID=%s processed", event.orderId());
-//        logger.info(msg);
-//    }
+    /**
+     * Handles order created events.
+     *
+     * @param event the broadcast order created event
+     */
+    @EventListener
+    public void onEvent(OrderCreatedEvent event) {
+        String msg = String.format("Всё хорошо. DomainOrderEvent with ID=%s processed", event.orderId());
+        logger.info(msg);
+    }
 }

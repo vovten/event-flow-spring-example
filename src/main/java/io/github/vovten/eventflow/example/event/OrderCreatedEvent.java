@@ -5,5 +5,5 @@ import io.github.vovten.eventflow.channel.InternalEventChannel;
 import io.github.vovten.eventflow.event.annotation.Event;
 
 @Event(channels = {InternalEventChannel.class, ExternalEventChannel.class})
-public record DomainOrderEvent(long orderId) {
+public record OrderCreatedEvent(long orderId) {
 }

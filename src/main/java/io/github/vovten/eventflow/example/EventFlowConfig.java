@@ -9,15 +9,12 @@ import io.github.vovten.eventflow.event.Event;
 import io.github.vovten.eventflow.publisher.EventPublisher;
 import io.github.vovten.eventflow.publisher.SpringEventPublisherBuilder;
 import io.github.vovten.eventflow.registry.EventHandlerRegistry;
-import io.github.vovten.eventflow.registry.SpringEventHandlerRegistryBuilder;
 import io.github.vovten.eventflow.serialization.EventSerializerFactory;
-import io.github.vovten.eventflow.serialization.EventTypeRegistry;
 import io.github.vovten.eventflow.transport.incoming.KafkaInTransport;
 import io.github.vovten.eventflow.transport.incoming.LocalQueueInTransport;
 import io.github.vovten.eventflow.transport.outgoing.BroadcastKafkaOutTransport;
 import io.github.vovten.eventflow.transport.outgoing.KafkaOutTransport;
 import io.github.vovten.eventflow.transport.outgoing.LocalQueueOutTransport;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -44,13 +41,7 @@ public class EventFlowConfig {
      * @param applicationContext the Spring application context
      * @return configured event handler registry
      */
-    @Bean
-    public EventHandlerRegistry eventHandlerRegistry(ApplicationContext applicationContext) {
-        return SpringEventHandlerRegistryBuilder.create(applicationContext)
-                .withAnnotationListeners("io.github.vovten.eventflow.example")
-                .withInterfaceListeners()
-                .buildAndLog();
-    }
+
 
     @Bean
     public EventSerializerFactory serializerFactory() {
@@ -85,13 +76,11 @@ public class EventFlowConfig {
      * Creates and configures the event dispatcher.
      * Sets up local and Kafka transports with idempotent processing and thread pool execution.
      *
-     * @param eventHandlerRegistry the event handler registry to use for dispatching events
      * @return configured and started event dispatcher
      */
     @Bean
-    EventDispatcher eventDispatcher(EventHandlerRegistry eventHandlerRegistry,
-                                    EventSerializerFactory serializerFactory) {
-        EventTypeRegistry.allowPackage("com.custom");
+    public EventDispatcher eventDispatcher(EventHandlerRegistry eventHandlerRegistry,
+                                           EventSerializerFactory serializerFactory) {
         var localTransport = new LocalQueueInTransport(eventQueue);
         var kafkaTransport = new KafkaInTransport("localhost:9092", "test2",
                 "group", serializerFactory);
@@ -100,7 +89,7 @@ public class EventFlowConfig {
                 .idempotent()
                 .executor(Executors.newFixedThreadPool(5))
                 .handlerRegistry(eventHandlerRegistry)
-                .build();
+                .buildAndLog();
         dispatcher.start(dispatcher::dispatch);
         return dispatcher;
     }
