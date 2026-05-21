@@ -58,7 +58,7 @@ public class OrderEventListener {
      *
      * @param event the broadcast order created event
      */
-    @EventListener(BroadCastOrderCreatedEvent.class)
+    @EventListener(OrderCreatedEvent.class)
     public void onEvent(Envelope<OrderCreatedEvent> event) {
         OrderCreatedEvent payload = event.payload();
         String msg = String.format("Envelope DomainOrderEvent with ID=%s processed", payload.orderId());

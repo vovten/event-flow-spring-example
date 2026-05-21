@@ -46,7 +46,7 @@ public class OrderController {
                 request.getQuantity(),
                 request.getPrice()
         );
-        eventPublisher.publish(new OrderCreatedEvent(order.getId()));
+        eventPublisher.publish(UUID.nameUUIDFromBytes("test".getBytes()), new OrderCreatedEvent(order.getId()));
 
 //        eventPublisher.prepare(new OrderCreatedEvent(1))
 //                .withProcessId(UUID.randomUUID())
