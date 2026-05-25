@@ -3,11 +3,10 @@ event-flow:
   publisher:
     enabled: true
     transactional: true
-    silent: true
     retry:
       enabled: true
       max-attempts: 3
-    async:
+    logging:
       enabled: true
     channels:
       - name: internal
@@ -31,6 +30,8 @@ event-flow:
       allowed-event-packages:
         - com.custom
     idempotent:
+      enabled: true
+    logging:
       enabled: true
     transports:
       - name: local-queue
