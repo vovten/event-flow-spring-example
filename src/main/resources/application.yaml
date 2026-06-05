@@ -8,6 +8,12 @@ event-flow:
       max-attempts: 3
     logging:
       enabled: true
+    lifecycle:
+      enabled: true
+      service-name: my-microservice
+      store:
+        type: db
+        table-name: event_store
     channels:
       - name: internal
         transports:
@@ -32,6 +38,8 @@ event-flow:
     idempotent:
       enabled: true
     logging:
+      enabled: true
+    lifecycle:
       enabled: true
     transports:
       - name: local-queue

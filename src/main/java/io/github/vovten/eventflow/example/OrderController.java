@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -43,11 +44,14 @@ public class OrderController {
                 request.getQuantity(),
                 request.getPrice()
         );
-        eventPublisher.publish(new DomainOrderEvent(order.getId()));
-        eventPublisher.publish(new EnvelopeDomainOrderEvent(order.getId()));
-//        eventPublisher.publish(new InternalOrderCreatedEvent(order.getId())); // try different type of events here
-//        eventPublisher.publish(new ExternalOrderCreatedEvent(order.getId())); // try different type of events here
-//        eventPublisher.publish(new BroadCastOrderCreatedEvent(order.getId())); // try different type of events here
+        UUID processId = UUID.nameUUIDFromBytes("processId".getBytes());
+        eventPublisher.prepare(new InternalOrderCreatedEvent(order.getId()))
+                .withProcessId(processId)
+                .publish();
+        // try different type of events here
+        // eventPublisher.publish(new DomainOrderEvent(order.getId()));
+        // eventPublisher.publish(new ExternalOrderCreatedEvent(order.getId()));
+        //  eventPublisher.publish(new BroadCastOrderCreatedEvent(order.getId()));
         return ResponseEntity.ok(order);
     }
 

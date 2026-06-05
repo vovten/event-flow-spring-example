@@ -1,11 +1,7 @@
 package io.github.vovten.eventflow.example.event;
 
-import io.github.vovten.eventflow.channel.EventChannel;
-import io.github.vovten.eventflow.channel.InternalEventChannel;
 import io.github.vovten.eventflow.event.Event;
-import io.github.vovten.eventflow.channel.EventChannel;
-
-import java.util.List;
+import io.github.vovten.eventflow.lifecycle.EventLifecycle;
 
 /**
  * Event representing an internal order creation.
@@ -35,8 +31,7 @@ public class InternalOrderCreatedEvent implements Event {
     }
 
     @Override
-    public List<Class<? extends EventChannel>> channels() {
-        return List.of(InternalEventChannel.class);
+    public EventLifecycle lifecycle() {
+        return EventLifecycle.MANAGED;
     }
-
 }
