@@ -8,12 +8,20 @@ event-flow:
       max-attempts: 3
     logging:
       enabled: true
+      log-levels:
+        InternalOrderCreatedEvent: ERROR
+        DomainOrderEvent: INFO
     lifecycle:
       enabled: true
       service-name: my-microservice
       store:
         type: db
-        table-name: event_store
+        table-name: myschema.event_store
+        auto-init-schema: true
+      cleanup:
+        enabled: true
+        max-age: 1d
+        interval: 30s
     channels:
       - name: internal
         transports:
@@ -39,6 +47,9 @@ event-flow:
       enabled: true
     logging:
       enabled: true
+      log-levels:
+        InternalOrderCreatedEvent: ERROR
+        DomainOrderEvent: INFO
     lifecycle:
       enabled: true
     transports:

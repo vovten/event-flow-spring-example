@@ -49,7 +49,7 @@ public class OrderController {
                 .withProcessId(processId)
                 .publish();
         // try different type of events here
-        // eventPublisher.publish(new DomainOrderEvent(order.getId()));
+         eventPublisher.publish(new DomainOrderEvent(order.getId()));
         // eventPublisher.publish(new ExternalOrderCreatedEvent(order.getId()));
         //  eventPublisher.publish(new BroadCastOrderCreatedEvent(order.getId()));
         return ResponseEntity.ok(order);

@@ -1,7 +1,7 @@
 package io.github.vovten.eventflow.example;
 
-import io.github.vovten.eventflow.EventListener;
 import com.custom.BroadCastOrderCreatedEvent;
+import io.github.vovten.eventflow.EventListener;
 import io.github.vovten.eventflow.event.Envelope;
 import io.github.vovten.eventflow.example.event.DomainOrderEvent;
 import io.github.vovten.eventflow.example.event.EnvelopeDomainOrderEvent;

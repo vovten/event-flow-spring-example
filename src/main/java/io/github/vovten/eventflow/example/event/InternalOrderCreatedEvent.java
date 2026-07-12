@@ -34,4 +34,11 @@ public class InternalOrderCreatedEvent implements Event {
     public EventLifecycle lifecycle() {
         return EventLifecycle.MANAGED;
     }
+
+    @Override
+    public String toString() {
+        return "InternalOrderCreatedEvent{" +
+                "orderId=" + orderId +
+                '}';
+    }
 }
