@@ -36,7 +36,27 @@ public class CustomEventStore implements EventStore {
     }
 
     @Override
+    public List<StoredEvent> findByStatuses(List<EventStatus> statuses, Instant before, int batchSize) {
+        return List.of();
+    }
+
+    @Override
+    public void markForRetry(UUID eventId) {
+
+    }
+
+    @Override
+    public List<StoredEvent> findRetryableEvents(List<EventStatus> statuses, Instant before, int batchSize) {
+        return List.of();
+    }
+
+    @Override
     public Optional<StoredEvent> findById(UUID eventId) {
         return Optional.empty();
+    }
+
+    @Override
+    public int deleteByStatuses(List<EventStatus> statuses, Instant before, int batchSize) {
+        return 0;
     }
 }
