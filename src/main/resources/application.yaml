@@ -16,7 +16,7 @@ event-flow:
       service-name: my-microservice
       store:
         type: db
-        table-name: myschema.event_store
+        table-name: event_store
         auto-init-schema: true
       cleanup:
         enabled: true
@@ -32,6 +32,7 @@ event-flow:
             servers: localhost:9092
             topics: test2
             serialization: myJson
+            key: bean:customKafkaKeyResolver
       - name: broadcast
         transports:
           - name: kafka
@@ -49,7 +50,7 @@ event-flow:
       enabled: true
       log-levels:
         InternalOrderCreatedEvent: ERROR
-        DomainOrderEvent: INFO
+        DomainOrderEvent: ERROR
     lifecycle:
       enabled: true
     transports:

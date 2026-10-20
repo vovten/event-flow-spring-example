@@ -2,14 +2,20 @@ package io.github.vovten.eventflow.example;
 
 import com.custom.BroadCastOrderCreatedEvent;
 import io.github.vovten.eventflow.EventListener;
+import io.github.vovten.eventflow.EventSubscriber;
 import io.github.vovten.eventflow.event.Envelope;
+import io.github.vovten.eventflow.event.Event;
 import io.github.vovten.eventflow.example.event.DomainOrderEvent;
 import io.github.vovten.eventflow.example.event.EnvelopeDomainOrderEvent;
 import io.github.vovten.eventflow.example.event.ExternalOrderCreatedEvent;
 import io.github.vovten.eventflow.example.event.InternalOrderCreatedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.ansi.AnsiOutput;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * Event listener for order-related events.
@@ -17,9 +23,12 @@ import org.springframework.stereotype.Component;
  * Each event type is processed and logged to the console.
  */
 @Component
-public class OrderEventListener {
+public class OrderEventListener implements EventSubscriber {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderEventListener.class);
+
+    @Value("${spring.output.ansi.enabled:detect}")
+    private AnsiOutput.Enabled springOutputAnsiEnabled;
 
     @EventListener
     public void onEvent(InternalOrderCreatedEvent event) {
@@ -66,9 +75,20 @@ public class OrderEventListener {
      *
      * @param event the broadcast order created event
      */
-    @EventListener
-    public void onEvent(DomainOrderEvent event) {
-        String msg = String.format("DomainOrderEvent with ID=%s processed", event.orderId());
+    @EventListener(DomainOrderEvent.class)
+    public void onEvent2(Envelope<DomainOrderEvent> event) {
+        String msg = String.format("DomainOrderEvent with ID=%s processed", event.eventId());
         logger.info(msg);
+    }
+
+    @Override
+    public List<Class<?>> events() {
+        return List.of(DomainOrderEvent.class);
+    }
+
+    @Override
+    public void onEvent(Event event) {
+        Object payload = ((Envelope) event).payload();
+        System.out.println("Event for subscriber: " + event);
     }
 }

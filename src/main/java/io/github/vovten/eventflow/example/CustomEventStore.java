@@ -46,7 +46,7 @@ public class CustomEventStore implements EventStore {
     }
 
     @Override
-    public List<StoredEvent> findRetryableEvents(List<EventStatus> statuses, Instant before, int batchSize) {
+    public List<StoredEvent> findRetryableEvents(List<EventStatus> statuses, Instant before, int batchSize, String service) {
         return List.of();
     }
 

@@ -1,16 +1,19 @@
 package io.github.vovten.eventflow.example;
 
 import com.custom.BroadCastOrderCreatedEvent;
+import io.github.vovten.eventflow.event.Envelope;
+import io.github.vovten.eventflow.event.Event;
 import io.github.vovten.eventflow.example.event.DomainOrderEvent;
-import io.github.vovten.eventflow.example.event.EnvelopeDomainOrderEvent;
 import io.github.vovten.eventflow.example.event.ExternalOrderCreatedEvent;
 import io.github.vovten.eventflow.example.event.InternalOrderCreatedEvent;
 import io.github.vovten.eventflow.publisher.EventPublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
@@ -30,13 +33,20 @@ public class OrderController {
     private final AtomicLong orderCounter = new AtomicLong(1);
 
     /**
-     * Creates a new order and publishes a broadcast event.
+     * Creates a new order and publishes an event.
+     * <p>
+     * The {@code scenario} parameter switches between different event/publish combinations
+     * for testing the event-flow library (especially the EventKeyResolver feature).
      *
-     * @param request the order request containing customer name, product, quantity, and price
+     * @param request  the order request containing customer name, product, quantity, and price
+     * @param scenario publish scenario: default, null-id, raw-external, domain, domain-legacy,
+     *                 broadcast, internal, internal-prepare, envelope-domain
      * @return the created order with generated ID
      */
+    @Transactional
     @PostMapping("/createOrder")
-    public ResponseEntity<Order> createOrder(@RequestBody OrderRequest request) {
+    public ResponseEntity<Order> createOrder(@RequestBody OrderRequest request,
+                                             @RequestParam(required = false, defaultValue = "default") String scenario) {
         Order order = new Order(
                 orderCounter.getAndIncrement(),
                 request.getCustomerName(),
@@ -44,14 +54,24 @@ public class OrderController {
                 request.getQuantity(),
                 request.getPrice()
         );
-        UUID processId = UUID.nameUUIDFromBytes("processId".getBytes());
-        eventPublisher.prepare(new InternalOrderCreatedEvent(order.getId()))
-                .withProcessId(processId)
-                .publish();
-        // try different type of events here
-         eventPublisher.publish(new DomainOrderEvent(order.getId()));
-        // eventPublisher.publish(new ExternalOrderCreatedEvent(order.getId()));
-        //  eventPublisher.publish(new BroadCastOrderCreatedEvent(order.getId()));
+        UUID processId = UUID.randomUUID();
+        switch (scenario) {
+            case "default" -> eventPublisher.prepare(new ExternalOrderCreatedEvent(order.getId()))
+                    .withProcessId(processId)
+                    .withMetadata("product-id", request.getProduct())
+                    .publish();
+            case "null-id" -> eventPublisher.prepare(new ExternalOrderCreatedEvent(null))
+                    .withProcessId(processId)
+                    .publish();
+            case "raw-external" -> eventPublisher.publish(new ExternalOrderCreatedEvent(order.getId()));
+            case "domain" -> eventPublisher.publish(new DomainOrderEvent(order.getId()));
+            case "domain-legacy" -> eventPublisher.publish(new io.github.vovten.eventflow.example.DomainOrderEvent(order.getId() + 1));
+            case "broadcast" -> eventPublisher.publish(new BroadCastOrderCreatedEvent(order.getId()));
+            case "internal" -> eventPublisher.publish(new InternalOrderCreatedEvent(order.getId()));
+            case "internal-prepare" -> eventPublisher.prepare(new InternalOrderCreatedEvent(order.getId())).publish();
+            case "envelope-domain" -> eventPublisher.publish(new io.github.vovten.eventflow.example.event.EnvelopeDomainOrderEvent(order.getId()));
+            default -> throw new IllegalArgumentException("Unknown scenario: " + scenario);
+        }
         return ResponseEntity.ok(order);
     }
 
